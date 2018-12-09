@@ -1,4 +1,4 @@
-module.exports = function InstantEnchant(mod) {
+module.exports = function InstantEverything(mod) {
     const PURPOSES = ['enchant', 'upgrade', 'soulbind', 'merge', 'dismantle'];
 
     let hooks = {};
