@@ -86,13 +86,7 @@ module.exports = function InstantEverything(mod) {
                     mod.send('C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 1, {
                         contract: event.contract,
                     });
-
-                    process.nextTick(() => {
-                        mod.send('S_CANCEL_CONTRACT', 1, {
-                            type: 89,
-                            id: event.contract,
-                        });
-                    });
+                    return false;
                 });
 
                 hook('dismantle', 'C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 'raw', _ => false);
