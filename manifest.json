@@ -1,6 +1,6 @@
 {
     "files": {
-        "index.js": "dff497d657542e1231457051ac8aefcdd8e1f227e23c4b8562ee5cd0c3ea46e9",
+        "index.js": "e69a824b55ec6cd57f2ef2055b66ad70d77aed3dd064b6551a4abe816b23fc86",
         "settings_migrator.js": "823fc1c204003a4a782e23b1a0781b9ee48d2865004a8acb73359777c0c067bc",
         "module.json": "90ec2cfc4ebf9d639a1e02f55f7c6520442d4878c10119113dfcd23bdac68f8e"
     },
@@ -20,6 +20,9 @@
         "C_BIND_ITEM_EXECUTE": ["raw", 1],
 
         "C_MERGE_ITEM_EXECUTE": ["raw", 1],
+        
+        "C_RQ_START_SOCIAL_ON_PROGRESS_DECOMPOSITION": 1,
+        "C_RQ_COMMIT_DECOMPOSITION_CONTRACT": ["raw", 1],
 
         "S_REQUEST_CONTRACT": 1,
         "S_CANCEL_CONTRACT": 1
