@@ -1,4 +1,8 @@
 module.exports = function InstantEverything(mod) {
+    if(mod.proxyAuthor !== 'caali')
+        mod.warn('You are trying to use InstantEverything on an unsupported version of tera-proxy. It may not work as expected, and even if it does now it may break at any point in the future!');
+
+
     const PURPOSES = ['enchant', 'upgrade', 'soulbind', 'merge', 'dismantle'];
 
     let hooks = {};
