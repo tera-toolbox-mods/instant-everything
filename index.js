@@ -1,5 +1,7 @@
+const SettingsUI = require('tera-mod-ui').Settings;
+
 module.exports = function InstantEverything(mod) {
-    if(mod.proxyAuthor !== 'caali' || !global.TeraProxy)
+    if (mod.proxyAuthor !== 'caali' || !global.TeraProxy)
         mod.warn('You are trying to use InstantEverything on an unsupported version of tera-proxy. It may not work as expected, and even if it does now it may break at any point in the future!');
 
 
@@ -7,7 +9,7 @@ module.exports = function InstantEverything(mod) {
 
     let hooks = {};
     function hook(purpose, ...args) {
-        if(!hooks[purpose])
+        if (!hooks[purpose])
             hooks[purpose] = [];
 
         hooks[purpose].push(mod.hook(...args));
@@ -16,12 +18,12 @@ module.exports = function InstantEverything(mod) {
     let enchanting = null;
     let upgrading = null;
     function enable(purpose) {
-        switch(purpose) {
+        switch (purpose) {
             case 'enchant': {
                 hook('enchant', 'C_REGISTER_ENCHANT_ITEM', 1, event => { enchanting = event });
 
                 hook('enchant', 'C_START_ENCHANT', 1, event => {
-                    if(enchanting && event.contract === enchanting.contract) {
+                    if (enchanting && event.contract === enchanting.contract) {
                         mod.send('C_REQUEST_ENCHANT', 1, enchanting);
                         return false;
                     }
@@ -36,7 +38,7 @@ module.exports = function InstantEverything(mod) {
                 hook('upgrade', 'C_REGISTER_' + upgrading_method + '_ITEM', 1, event => { upgrading = event });
 
                 hook('upgrade', 'C_START_' + upgrading_method, 1, event => {
-                    if(upgrading && event.contract === upgrading.contract) {
+                    if (upgrading && event.contract === upgrading.contract) {
                         mod.send('C_REQUEST_' + upgrading_method, 1, upgrading);
                         return false;
                     }
@@ -100,7 +102,7 @@ module.exports = function InstantEverything(mod) {
     }
 
     function disable(purpose) {
-        if(hooks[purpose]) {
+        if (hooks[purpose]) {
             hooks[purpose].forEach(h => mod.unhook(h));
             hooks[purpose] = [];
         }
@@ -108,26 +110,46 @@ module.exports = function InstantEverything(mod) {
 
     // Main
     PURPOSES.forEach(purpose => {
-        if(mod.settings[purpose])
+        if (mod.settings[purpose])
             enable(purpose);
     });
 
     mod.command.add('instant', {
         $default(purpose) {
-            if(PURPOSES.indexOf(purpose) < 0) {
-                mod.command.message(purpose ? `Invalid mode: ${purpose}!` : 'Must specify mode!');
-                mod.command.message(`Valid modes: ${PURPOSES.join(', ')}`);
-            } else {
-                if(mod.settings[purpose]) {
-                    disable(purpose);
-                    mod.command.message(`Instant ${purpose} disabled!`);
+            if (PURPOSES.indexOf(purpose) < 0) {
+                if (ui) {
+                    ui.show();
                 } else {
-                    enable(purpose);
-                    mod.command.message(`Instant ${purpose} enabled!`);
+                    mod.command.message(purpose ? `Invalid mode: ${purpose}!` : 'Must specify mode!');
+                    mod.command.message(`Valid modes: ${PURPOSES.join(', ')}`);
                 }
 
-                mod.settings[purpose] = !mod.settings[purpose];
+                return;
             }
-        },
+
+            if (mod.settings[purpose]) {
+                disable(purpose);
+                mod.command.message(`Instant ${purpose} disabled!`);
+            } else {
+                enable(purpose);
+                mod.command.message(`Instant ${purpose} enabled!`);
+            }
+
+            mod.settings[purpose] = !mod.settings[purpose];
+        }
     });
-}
+
+    // Settings UI
+    let ui = null;
+    if (global.TeraProxy.GUIMode) {
+        ui = new SettingsUI(mod, require('./settings_structure'), mod.settings, { height: 232 });
+        ui.on('update', settings => { mod.settings = settings; });
+
+        this.destructor = () => {
+            if (ui) {
+                ui.close();
+                ui = null;
+            }
+        };
+    }
+};
