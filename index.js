@@ -1,8 +1,11 @@
 const SettingsUI = require('tera-mod-ui').Settings;
 
 module.exports = function InstantEverything(mod) {
-    if (mod.proxyAuthor !== 'caali' || !global.TeraProxy)
-        mod.warn('You are trying to use InstantEverything on an unsupported version of tera-proxy. It may not work as expected, and even if it does now it may break at any point in the future!');
+    if(mod.proxyAuthor !== 'caali' || !global.TeraProxy) {
+        mod.warn('You are trying to use InstantEverything on an unsupported legacy version of tera-proxy.');
+        mod.warn('The module may not work as expected, and even if it works for now, it may break at any point in the future!');
+        mod.warn('It is highly recommended that you download the latest official version from the #proxy channel in https://discord.gg/dUNDDtw');
+    }
 
 
     const PURPOSES = ['enchant', 'upgrade', 'soulbind', 'merge', 'dismantle'];
@@ -34,17 +37,16 @@ module.exports = function InstantEverything(mod) {
             }
 
             case 'upgrade': {
-                const upgrading_method = mod.majorPatchVersion >= 79 ? 'EVOLUTION' : 'UPGRADE';
-                hook('upgrade', 'C_REGISTER_' + upgrading_method + '_ITEM', 1, event => { upgrading = event });
+                hook('upgrade', 'C_REGISTER_EVOLUTION_ITEM', 1, event => { upgrading = event });
 
-                hook('upgrade', 'C_START_' + upgrading_method, 1, event => {
+                hook('upgrade', 'C_START_EVOLUTION', 1, event => {
                     if (upgrading && event.contract === upgrading.contract) {
-                        mod.send('C_REQUEST_' + upgrading_method, 1, upgrading);
+                        mod.send('C_REQUEST_EVOLUTION', 1, upgrading);
                         return false;
                     }
                 });
 
-                hook('upgrade', 'C_REQUEST_' + upgrading_method, 'raw', _ => false);
+                hook('upgrade', 'C_REQUEST_EVOLUTION', 'raw', _ => false);
                 break;
             }
 
