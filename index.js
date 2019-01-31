@@ -7,6 +7,9 @@ module.exports = function InstantEverything(mod) {
         mod.warn('It is highly recommended that you download the latest official version from the #proxy channel in https://discord.gg/dUNDDtw');
     }
 
+    if(mod.platform === 'classic')
+        return;
+
 
     const PURPOSES = ['enchant', 'upgrade', 'soulbind', 'merge', 'dismantle'];
 
