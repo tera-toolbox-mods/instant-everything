@@ -7,10 +7,6 @@ module.exports = function InstantEverything(mod) {
         mod.warn('It is highly recommended that you download the latest official version from the #proxy channel in https://discord.gg/dUNDDtw');
     }
 
-    if(mod.platform === 'classic')
-        return;
-
-
     const PURPOSES = ['enchant', 'upgrade', 'soulbind', 'merge', 'dismantle'];
 
     let hooks = {};
@@ -26,30 +22,36 @@ module.exports = function InstantEverything(mod) {
     function enable(purpose) {
         switch (purpose) {
             case 'enchant': {
-                hook('enchant', 'C_REGISTER_ENCHANT_ITEM', 1, event => { enchanting = event });
+                if(mod.majorPatchVersion >= 61) {
+                    hook('enchant', 'C_REGISTER_ENCHANT_ITEM', 1, event => { enchanting = event });
 
-                hook('enchant', 'C_START_ENCHANT', 1, event => {
-                    if (enchanting && event.contract === enchanting.contract) {
-                        mod.send('C_REQUEST_ENCHANT', 1, enchanting);
-                        return false;
-                    }
-                });
+                    hook('enchant', 'C_START_ENCHANT', 1, event => {
+                        if (enchanting && event.contract === enchanting.contract) {
+                            mod.send('C_REQUEST_ENCHANT', 1, enchanting);
+                            return false;
+                        }
+                    });
 
-                hook('enchant', 'C_REQUEST_ENCHANT', 'raw', _ => false);
+                    hook('enchant', 'C_REQUEST_ENCHANT', 'raw', _ => false);
+                } else {
+                    // TODO Classic
+                }
                 break;
             }
 
             case 'upgrade': {
-                hook('upgrade', 'C_REGISTER_EVOLUTION_ITEM', 1, event => { upgrading = event });
+                if(mod.majorPatchVersion >= 79) {
+                    hook('upgrade', 'C_REGISTER_EVOLUTION_ITEM', 1, event => { upgrading = event });
 
-                hook('upgrade', 'C_START_EVOLUTION', 1, event => {
-                    if (upgrading && event.contract === upgrading.contract) {
-                        mod.send('C_REQUEST_EVOLUTION', 1, upgrading);
-                        return false;
-                    }
-                });
+                    hook('upgrade', 'C_START_EVOLUTION', 1, event => {
+                        if (upgrading && event.contract === upgrading.contract) {
+                            mod.send('C_REQUEST_EVOLUTION', 1, upgrading);
+                            return false;
+                        }
+                    });
 
-                hook('upgrade', 'C_REQUEST_EVOLUTION', 'raw', _ => false);
+                    hook('upgrade', 'C_REQUEST_EVOLUTION', 'raw', _ => false);
+                }
                 break;
             }
 
@@ -93,14 +95,16 @@ module.exports = function InstantEverything(mod) {
             }
 
             case 'dismantle': {
-                hook('dismantle', 'C_RQ_START_SOCIAL_ON_PROGRESS_DECOMPOSITION', 1, event => {
-                    mod.send('C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 1, {
-                        contract: event.contract,
+                if(mod.majorPatchVersion >= 77) {
+                    hook('dismantle', 'C_RQ_START_SOCIAL_ON_PROGRESS_DECOMPOSITION', 1, event => {
+                        mod.send('C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 1, {
+                            contract: event.contract,
+                        });
+                        return false;
                     });
-                    return false;
-                });
 
-                hook('dismantle', 'C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 'raw', _ => false);
+                    hook('dismantle', 'C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 'raw', _ => false);
+                }
                 break;
             }
         }
