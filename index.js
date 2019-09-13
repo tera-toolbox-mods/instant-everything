@@ -26,7 +26,7 @@ module.exports = function InstantEverything(mod) {
                         }
                     });
 
-                    hook('enchant', 'C_REQUEST_ENCHANT', 'raw', _ => false);
+                    hook('enchant', 'C_REQUEST_ENCHANT', 'event', () => false);
                 } else {
                     // TODO Classic
                 }
@@ -44,7 +44,7 @@ module.exports = function InstantEverything(mod) {
                         }
                     });
 
-                    hook('upgrade', 'C_REQUEST_EVOLUTION', 'raw', _ => false);
+                    hook('upgrade', 'C_REQUEST_EVOLUTION', 'event', () => false);
                 }
                 break;
             }
@@ -63,7 +63,7 @@ module.exports = function InstantEverything(mod) {
                     });
                 });
 
-                hook('soulbind', 'C_BIND_ITEM_EXECUTE', 'raw', _ => false);
+                hook('soulbind', 'C_BIND_ITEM_EXECUTE', 'event', () => false);
                 break;
             }
 
@@ -84,7 +84,7 @@ module.exports = function InstantEverything(mod) {
                     });
                 });
 
-                hook('merge', 'C_MERGE_ITEM_EXECUTE', 'raw', _ => false);
+                hook('merge', 'C_MERGE_ITEM_EXECUTE', 'event', () => false);
                 break;
             }
 
@@ -97,7 +97,7 @@ module.exports = function InstantEverything(mod) {
                         return false;
                     });
 
-                    hook('dismantle', 'C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 'raw', _ => false);
+                    hook('dismantle', 'C_RQ_COMMIT_DECOMPOSITION_CONTRACT', 'event', () => false);
                 }
                 break;
             }
