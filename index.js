@@ -37,32 +37,32 @@ module.exports = function InstantEverything(mod) {
 
             case 'upgrade': {
                 if(mod.majorPatchVersion >= 79) {
-                    hook('repair', 'C_REGISTER_EVOLUTION_ITEM', 1, event => { upgrading = event });
+                    hook('upgrade', 'C_REGISTER_EVOLUTION_ITEM', 1, event => { upgrading = event });
 
-                    hook('repair', 'C_START_EVOLUTION', 1, event => {
+                    hook('upgrade', 'C_START_EVOLUTION', 1, event => {
                         if (upgrading && event.contract === upgrading.contract) {
                             mod.send('C_REQUEST_EVOLUTION', 1, upgrading);
                             return false;
                         }
                     });
 
-                    hook('repair', 'C_REQUEST_EVOLUTION', 'event', () => false);
+                    hook('upgrade', 'C_REQUEST_EVOLUTION', 'event', () => false);
                 }
                 break;
             }
 
             case 'repair': {
                 if(mod.majorPatchVersion >= 79) {
-                    hook('upgrade', 'C_REGISTER_REPAIR_ITEM', 1, event => { repairing = event });
+                    hook('repair', 'C_REGISTER_REPAIR_ITEM', 1, event => { repairing = event });
 
-                    hook('upgrade', 'C_START_REPAIR_ITEM', 1, event => {
+                    hook('repair', 'C_START_REPAIR_ITEM', 1, event => {
                         if (repairing && event.contract === repairing.contract) {
                             mod.send('C_REQUEST_REPAIR_ITEM', 1, repairing);
                             return false;
                         }
                     });
 
-                    hook('upgrade', 'C_REQUEST_REPAIR_ITEM', 'event', () => false);
+                    hook('repair', 'C_REQUEST_REPAIR_ITEM', 'event', () => false);
                 }
                 break;
             }
