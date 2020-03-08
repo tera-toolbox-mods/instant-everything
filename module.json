@@ -6,7 +6,7 @@
     "servers": ["https://raw.githubusercontent.com/tera-toolbox-mods/instant-everything/master/"],
     "options": {
         "niceName": "InstantEverything",
-        "settingsVersion": 1,
+        "settingsVersion": 2,
         "settingsFile": "config.json",
         "settingsMigrator": "settings_migrator.js"
     },
