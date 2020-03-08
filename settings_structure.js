@@ -23,5 +23,10 @@ module.exports = [
         "key": "dismantle",
         "name": "Instant Dismantling",
         "type": "bool"
+    },
+    {
+        "key": "repair",
+        "name": "Instant Repairing",
+        "type": "bool"
     }
 ];
