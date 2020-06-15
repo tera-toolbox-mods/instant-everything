@@ -1,6 +1,6 @@
 const SettingsUI = require('tera-mod-ui').Settings;
 
-module.exports = function InstantEverything(mod) {
+exports.NetworkMod = function(mod) {
     const PURPOSES = ['enchant', 'upgrade', 'soulbind', 'merge', 'dismantle'];
 
     let hooks = {};
