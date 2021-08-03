@@ -68,7 +68,7 @@ exports.NetworkMod = function(mod) {
             }
 
             case 'merge': {
-                hook('merge', 'S_REQUEST_CONTRACT', 1, event => {
+                hook('merge', 'S_REQUEST_CONTRACT', mod.majorPatchVersion ? 2 : 1, event => {
                     if (!mod.game.me.is(event.senderId) || event.type != 33)
                         return;
 
